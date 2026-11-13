@@ -14,12 +14,14 @@
         notSuitableFor: p.not_suitable_for || '', usage: p.usage || '', notes: p.notes || '',
         price: p.price, originalPrice: p.original_price
       }]));
+      window.registerExternalProducts?.(products);
       const grid = document.getElementById('productGrid');
       if (!grid) return;
       grid.innerHTML = Object.entries(products).map(([id, p]) => `<article class="product reveal" data-category="${escapeValue(p.category).toLowerCase()}" onclick="openProduct('${escapeValue(id)}')"><div class="product-img ${escapeValue(p.image)}"${p.imageUrl ? ` style="background-image:url('${escapeValue(p.imageUrl)}')"` : ''}></div><div class="product-info"><span class="tag">${escapeValue(p.category)}</span><h3>${escapeValue(p.name)}</h3><p>${escapeValue(p.description)}</p><div class="product-bottom"><span class="price">${p.price ? `${escapeValue(p.price)} جنيه` : 'السعر يُضاف لاحقًا'}</span><button class="btn btn-outline product-action" type="button" onclick="event.stopPropagation(); openProduct('${escapeValue(id)}')">التفاصيل</button></div></div></article>`).join('');
       window.openProduct = function (id) {
         const p = products[id];
         if (!p) return;
+        window.setCurrentProduct?.(id);
         document.getElementById('modalCategory').textContent = p.category;
         document.getElementById('modalTitle').textContent = p.name;
         document.getElementById('modalDescription').textContent = p.description;
